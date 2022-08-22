@@ -33,7 +33,6 @@ python -m unittest discover -vvv
 In CMD, please start to run functions.py application with the below command:
 ```
 python functions.py
-
 ```
 When the running is done, the application exports a json file to the folder, on TOP20_movies_data name.
 
