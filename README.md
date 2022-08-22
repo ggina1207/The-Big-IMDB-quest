@@ -28,7 +28,7 @@ Please run the below command in CMD, and if the reply is 'OK', then the test is 
 python -m unittest discover -vvv
 ```
 
-### 2. Run Scraper and Rating Adjust applications
+### 2. Run Scraper and Rating Adjustment applications
 
 In CMD, please start to run functions.py application with the below command:
 ```
