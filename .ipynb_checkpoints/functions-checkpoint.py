@@ -4,8 +4,7 @@ import re
 import pandas as pd
 import numpy as np
 
-def Scraper():
-    url = 'https://www.imdb.com/chart/top/'
+def Scraper(url = 'https://www.imdb.com/chart/top/'):
     r = requests.get(url)
     soup = BeautifulSoup(r.content, 'html5lib')
 
@@ -22,7 +21,8 @@ def Scraper():
         movie_nr=[b for b in soup2.find('a', attrs={'class': 'ipc-metadata-list-item__label ipc-metadata-list-item__label--link', 
                                                     'href' : re.compile('awards')})]
         oscar_df.loc[len(oscar_df)]=movie_nr
-
+    
+    #finding and formatting the number of won Oscars from the text part of the pages 
     oscar_df=oscar_df[0].str.split(' ',5,expand=True)
     for c in oscar_df:
         if str(oscar_df[c].dtype) in ('object', 'string_', 'unicode_'):
@@ -53,33 +53,38 @@ def Scraper():
 
         movie_list.loc[len(movie_list)]=data
 
-    movie_list=movie_list.sort_index(ascending=False).reset_index(drop=True)
+    movie_list=movie_list.sort_index(ascending=False).reset_index(drop=True) \
+                .astype({'ratings':'float64', 'nr_of_oscars':'int64'})
+    
+    movie_list['adj_ratings']=movie_list['ratings'].copy()
+    
     return movie_list
 
-
-def RatingAdjustment():
-    movie_list=Scraper()
-    movie_list['adj_ratings']=movie_list['ratings'].copy()
-    movie_list['adj_ratings']=movie_list['adj_ratings'].astype(float)
-    movie_list['nr_of_oscars']=movie_list['nr_of_oscars'].astype(float)
+def ReviewPenalizer(movie_list, rating_adj, rating_nr, max_value):
+    movie_list[rating_adj]=movie_list[rating_adj]-(((max_value-movie_list[rating_nr])/100000).apply(np.floor))*0.1
     
-    # Review Penalizer
-    def ReviewPenalizer():
-        movie_list['adj_ratings']=movie_list['adj_ratings']-((((max(movie_list['nr_of_ratings'])-movie_list['nr_of_ratings'])/100000).apply(np.floor))*0.1)
-        return movie_list
+    return movie_list
 
-    # Oscar Calculator
-    def OscarCalculator():
-        movie_list=ReviewPenalizer()
-        movie_list.loc[(movie_list['nr_of_oscars'].between(1,2)), 'adj_ratings'] = movie_list['adj_ratings']+0.3
-        movie_list.loc[(movie_list['nr_of_oscars'].between(3,5)), 'adj_ratings'] = movie_list['adj_ratings']+0.5
-        movie_list.loc[(movie_list['nr_of_oscars'].between(6,10)), 'adj_ratings'] = movie_list['adj_ratings']+1
-        movie_list.loc[(movie_list['nr_of_oscars']>10), 'adj_ratings'] = movie_list['adj_ratings']+1.5
-        return movie_list
-    return OscarCalculator().to_json('TOP20_movies_data.json', orient='records', force_ascii=False)
+def OscarCalculator(movie_list, rating_adj, oscar_nr):
+    movie_list.loc[(movie_list[oscar_nr].between(1,2)), rating_adj] = movie_list[rating_adj]+0.3
+    movie_list.loc[(movie_list[oscar_nr].between(3,5)), rating_adj] = movie_list[rating_adj]+0.5
+    movie_list.loc[(movie_list[oscar_nr].between(6,10)), rating_adj] = movie_list[rating_adj]+1
+    movie_list.loc[(movie_list[oscar_nr]>10), rating_adj] = movie_list[rating_adj]+1.5
+
+    return movie_list
 
 if __name__ == '__main__':
     print("IMDB Scraper and Rating Adjustment functions started running...")
-    RatingAdjustment()
-    print("TOP20_movies_data.json have been saved in the folder")
 
+    movie_list=Scraper()
+    max_value=max(movie_list['nr_of_ratings'])
+    rating_adj='adj_ratings'
+    rating_nr='nr_of_ratings'
+    oscar_nr = 'nr_of_oscars'
+    
+    movie_list=OscarCalculator(ReviewPenalizer(movie_list, rating_adj=rating_adj, rating_nr=rating_nr, max_value=max_value),
+                               rating_adj=rating_adj, oscar_nr=oscar_nr)
+                
+    movie_list.to_json('TOP20_movies_data.json', orient='records', force_ascii=False)
+    
+    print("TOP20_movies_data.json have been saved in the folder")
