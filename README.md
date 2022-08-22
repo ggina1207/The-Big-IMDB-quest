@@ -17,24 +17,24 @@ For the unit tests, I made 4 different files:
 
 ### 1. Install requirement packages in CMD
 
-In first step, please open CMD and navigate to the folder, where to you check out/download the files, then run:
+In first step, please open CMD and navigate to the folder, where to you checked out/downloaded the files, then run:
 ```
 pip install -r requirements.txt
 ```
 ### 2. Run unit tests
 
-Please run the below command in CMD, and if the final reply is 'OK', then the tests are successful:
+Please run the command below in CMD, and if the final reply is 'OK', then the tests are successful:
 ```
 python -m unittest discover -vvv
 ```
 
 ### 2. Run Scraper and Rating Adjustment applications
 
-In CMD, please run functions.py application with the below command:
+In CMD, please run functions.py application with the command below:
 ```
 python functions.py
 ```
-When the running is done, the application will export a json file to the folder, with TOP20_movies_data name.
+When the run is completed, the application will export a json file to the folder, with TOP20_movies_data name.
 
 
 
