@@ -6,35 +6,35 @@ In the attached assignment my application scrapes given movie data (title, ratin
 
 ## Base construction of my work
 
-First, I scrape the required data from IMDB TOP250 movies site, but number of Oscars are not visible on this page. To get it, I made an another scraper, which collects the data from the TOP20 movies' own page. After the created of main dataframe, I made a separate function to adjust ratings based on reviews and Oscars, then in the final step I export the results into a json file.
+First, I scraped the required data from IMDB TOP250 movies site, but number of Oscars were not visible on this page. To get it, I made an another scraper, which collected the data from the TOP20 movies' own page. After the creation of the main dataframe, I made separate functions to adjust ratings based on reviews and Oscars, then in the final step I exported the results into a json file.
 
-In the unit tests, I made 4 different files:
+For the unit tests, I made 4 different files:
 - two for the URL connection tests, one of them tests the main IMDB page, the other one tests one of the movies' own page
-- one for to check the correctness of the calculation of Review Penalizer
-- one for to check the correctness of the calculation of Oscar Calculator
+- one to check the correctness of the calculation of Review Penalizer
+- one to check the correctness of the calculation of Oscar Calculator
 
 ## Steps to run
 
 ### 1. Install requirement packages in CMD
 
-In first step, please open CMD and navigate to the folder, where you check out/download the files, then run:
+In first step, please open CMD and navigate to the folder, where to you check out/download the files, then run:
 ```
 pip install -r requirements.txt
 ```
 ### 2. Run unit tests
 
-Please run the below command in CMD, and if the reply is 'OK', then the test is successful:
+Please run the below command in CMD, and if the final reply is 'OK', then the tests are successful:
 ```
 python -m unittest discover -vvv
 ```
 
 ### 2. Run Scraper and Rating Adjustment applications
 
-In CMD, please start to run functions.py application with the below command:
+In CMD, please run functions.py application with the below command:
 ```
 python functions.py
 ```
-When the running is done, the application exports a json file to the folder, on TOP20_movies_data name.
+When the running is done, the application will export a json file to the folder, with TOP20_movies_data name.
 
 
 
