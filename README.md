@@ -28,7 +28,7 @@ Please run the command below in CMD, and if the final reply is 'OK', then the te
 python -m unittest discover -vvv
 ```
 
-### 2. Run Scraper and Rating Adjustment applications
+### 2. Run Scraper and Rating Adjustment functions
 
 In CMD, please run functions.py application with the command below:
 ```
